@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.unity3d.player.UnityPlayer;
 import com.unity3d.player.UnityPlayerActivity;
 
-public class MainActivity extends UnityPlayerActivity {
+public class MainActivity {
 
   private ViewGroup rootView;
 
@@ -24,19 +24,16 @@ public class MainActivity extends UnityPlayerActivity {
 
   private Button backbutton;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  private void createMap(Context context) {
 
-    super.onCreate(savedInstanceState);
+    if (rootView == null) {
 
-    rootView = (ViewGroup)getWindow().getDecorView().getRootView();
-  }
+      rootView = (ViewGroup)((UnityPlayerActivity)context).getWindow().getDecorView().getRootView();
+    }
 
-  private void createMap() {
+    final Context that = context;
 
-    final Context that = this;
-
-    runOnUiThread(new Runnable() {
+    ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
       @Override
       public void run() {
 
@@ -60,6 +57,7 @@ public class MainActivity extends UnityPlayerActivity {
         mapview.setLayoutParams(params);
 
         mapview.loadUrl("file:///android_asset/webapp/index.html");
+//        mapview.loadUrl("https://get.webgl.org/");
 //        mapview.loadUrl("https://wx.indoorun.com/indoorun/test/demo/webapp/index.html?android=1&uuid=sdfds");
 
         if (mapview != null) {
@@ -94,7 +92,7 @@ public class MainActivity extends UnityPlayerActivity {
     });
   }
 
-  public void showMap(boolean show){
+  public void showMap(boolean show, Context context){
 
     Log.i("参数", String.valueOf(show));
 
@@ -102,7 +100,7 @@ public class MainActivity extends UnityPlayerActivity {
 
       if (mapview != null) {
 
-        runOnUiThread(new Runnable() {
+        ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
 
           @Override
           public void run() {
@@ -119,7 +117,7 @@ public class MainActivity extends UnityPlayerActivity {
 
     if (mapview != null) {
 
-      runOnUiThread(new Runnable() {
+      ((UnityPlayerActivity)context).runOnUiThread(new Runnable() {
 
         @Override
         public void run() {
@@ -133,6 +131,6 @@ public class MainActivity extends UnityPlayerActivity {
       return;
     }
 
-    createMap();
+    createMap(context);
   }
 }
